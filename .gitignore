@@ -1,0 +1,33 @@
+# Environnements virtuels
+venv/
+.venv/
+env/
+
+# Caches Python
+__pycache__/
+.pytest_cache/
+
+
+# IDE / Éditeurs
+.idea/
+.vscode/
+.history/
+
+
+# Jupyter
+.ipynb_checkpoints/
+
+
+# Données et résultats
+data/
+
+
+# Logs et fichiers temporaires
+*.log
+*.tmp
+*.swp
+.DS_Store
+
+
+# Fichiers sensibles / configuration
+.env
