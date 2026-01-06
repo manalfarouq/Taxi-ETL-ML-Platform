@@ -31,3 +31,5 @@ data/
 
 # Fichiers sensibles / configuration
 .env
+
+dataset.parquet
