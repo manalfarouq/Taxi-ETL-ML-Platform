@@ -1,35 +1,59 @@
-# Environnements virtuels
-venv/
-.venv/
-env/
-
-# Caches Python
+# Python
 __pycache__/
-.pytest_cache/
-
-
-# IDE / Éditeurs
-.idea/
-.vscode/
-.history/
-
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
 
 # Jupyter
 .ipynb_checkpoints/
 
+# Environment
+.env
+.env.local
 
-# Données et résultats
-data/
+# Data (trop volumineux)
+data/bronze/*.parquet
+data/silver/*.parquet
+data/models/*.pkl
+data/models/*.joblib
+*.csv
 
+# Airflow
+airflow/logs/*
+airflow/airflow.db
+airflow/airflow-webserver.pid
+logs/
 
-# Logs et fichiers temporaires
-*.log
-*.tmp
+# Database
+*.db
+*.sqlite
+
+# IDE
+.vscode/
+.idea/
 *.swp
 .DS_Store
+.history/
 
+# Docker
+*.log
 
-# Fichiers sensibles / configuration
-.env
+# Tests
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Garder les dossiers vides
+!data/bronze/.gitkeep
+!data/silver/.gitkeep
+!data/models/.gitkeep
+
 
 dataset.parquet
