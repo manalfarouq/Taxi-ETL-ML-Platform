@@ -1,1 +1,0 @@
-{"class":"org.apache.spark.ml.feature.OneHotEncoderModel","timestamp":1768228993142,"sparkVersion":"4.1.0","uid":"OneHotEncoder_ed53908a2193","paramMap":{"inputCol":"pickuphour_idx","outputCol":"pickuphour_ohe"},"defaultParamMap":{"dropLast":true,"handleInvalid":"error","outputCol":"OneHotEncoder_ed53908a2193__output"}}

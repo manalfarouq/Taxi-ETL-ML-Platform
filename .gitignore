@@ -31,6 +31,9 @@ airflow/airflow.db
 airflow/airflow-webserver.pid
 logs/
 
+# Modèles ML
+models/
+
 # Database
 *.db
 *.sqlite
