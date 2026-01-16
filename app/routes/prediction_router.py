@@ -69,19 +69,3 @@ def predict_eta(
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Erreur: {str(e)}")
-
-
-@router.get("/health")
-def health():
-    """Vérifier que le service de prédiction fonctionne"""
-    try:
-        service = get_prediction_service()
-        return {
-            "status": "ok",
-            "model_version": service.model_version
-        }
-    except Exception as e:
-        raise HTTPException(
-            status_code=503, 
-            detail=f"Service non disponible: {str(e)}"
-        )
