@@ -31,8 +31,12 @@ airflow/airflow.db
 airflow/airflow-webserver.pid
 logs/
 
-# Modèles ML
-models/
+# Modèles ML (ignorer uniquement les modèles volumineux dans ML)
+ML/notebook/models/
+
+# Inclure app/models/ pour l'API
+!app/models/
+
 
 # Database
 *.db

@@ -1,6 +1,6 @@
-from sqlqlchemy import Column, Integer, String, Float, DateTime
+from sqlalchemy import Column, Integer, String, Float, DateTime
 from ..db.db_connection import Base
-import datetime
+from datetime import datetime
 
 class ETAPrediction(Base):
     __tablename__ = "eta_predictions"
