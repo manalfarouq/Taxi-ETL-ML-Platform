@@ -51,7 +51,6 @@ def predict_eta(
             pickup_hour=features["pickuphour"],
             day_of_week=features["dayof_week"],
             predicted_duration=predicted_duration,
-            model_version=service.model_version,
             timestamp=datetime.now()
         )
 
@@ -61,7 +60,6 @@ def predict_eta(
 
         return PredictResponse(
             estimated_duration=round(predicted_duration, 2),
-            model_version=service.model_version,
             timestamp=prediction.timestamp,
             prediction_id=prediction.id
         )

@@ -16,7 +16,7 @@ class PredictionService:
         
         # Charger le modèle
         self.model = PipelineModel.load(model_path)
-        self.model_version = "v1.0"
+  
     
     def prepare_features(self, data: Dict) -> Dict:
         """Prépare les features à partir des données d'entrée"""

@@ -42,6 +42,5 @@ class PredictRequest(BaseModel):
 
 class PredictResponse(BaseModel):
     estimated_duration: float = Field(..., description="Durée estimée en minutes")
-    model_version: str = Field(default="v1.0")
     timestamp: datetime = Field(default_factory=datetime.now)
     prediction_id: Optional[int] = None
