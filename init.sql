@@ -10,6 +10,16 @@ GRANT ALL PRIVILEGES ON DATABASE taxi_nyc TO taxi_user;
 -- Donner les droits sur le schéma public
 GRANT ALL ON SCHEMA public TO taxi_user;
 
+-- Table des utilisateurs pour l'authentification
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+-- Index pour accélérer les recherches par username
+CREATE INDEX idx_users_username ON users(username);
+
 -- Créer la table
 CREATE TABLE taxi_trips (
     trip_id SERIAL PRIMARY KEY,

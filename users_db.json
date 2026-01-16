@@ -1,0 +1,8 @@
+{
+  "string": {
+    "user_id": 1,
+    "username": "string",
+    "password": "string",
+    "role": "user"
+  }
+}

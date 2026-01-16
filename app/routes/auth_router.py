@@ -1,8 +1,11 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends
 from pydantic import BaseModel
 from datetime import timedelta
+from sqlalchemy.orm import Session
 from app.auth.token_auth import create_access_token, Token
 from app.core.config import settings
+from ..db.db_connection import get_db_session as get_db
+from app.models.user import User
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -13,60 +16,22 @@ class LoginRequest(BaseModel):
     password: str
 
 
-# Base de données utilisateurs simple (à remplacer par une vraie DB en production)
-# ⚠️ En production: utiliser bcrypt pour hasher les mots de passe
-fake_users_db = {
-    "admin": {
-        "user_id": 1,
-        "username": "admin",
-        "password": "admin123",
-        "role": "admin"
-    },
-    "user": {
-        "user_id": 2,
-        "username": "user",
-        "password": "user123",
-        "role": "user"
-    }
-}
-
-
 @router.post("/login", response_model=Token)
-def login(request: LoginRequest):
-    """
-    Authentification et génération de token JWT
+def login(request: LoginRequest, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.username == request.username).first()
     
-    **Credentials par défaut:**
-    - username: `admin` / password: `admin123`
-    - username: `user` / password: `user123`
-    
-    **Retour:**
-    - `access_token`: Token JWT à utiliser dans le header Authorization
-    - `token_type`: Type de token (bearer)
-    
-    **Utilisation:**
-    ```
-    Authorization: Bearer <access_token>
-    ```
-    """
-    
-    user = fake_users_db.get(request.username)
-    
-    if not user or user["password"] != request.password:
+    if not user or user.password != request.password:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Nom d'utilisateur ou mot de passe incorrect",
             headers={"WWW-Authenticate": "Bearer"}
         )
     
-    # Créer le token avec les informations de l'utilisateur
-    # Utilise settings.ACCESS_TOKEN_EXPIRE_MINUTES depuis .env
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={
-            "sub": user["username"],
-            "user_id": user["user_id"],
-            "role": user["role"]
+            "sub": user.username,
+            "user_id": user.id
         },
         expires_delta=access_token_expires
     )
@@ -75,45 +40,36 @@ def login(request: LoginRequest):
 
 
 @router.post("/register")
-def register(request: LoginRequest):
-    """
-    Enregistrer un nouvel utilisateur
+def register(request: LoginRequest, db: Session = Depends(get_db)):
+    existing_user = db.query(User).filter(User.username == request.username).first()
     
-    **Note:** En production, les mots de passe doivent être hashés avec bcrypt
-    """
-    
-    if request.username in fake_users_db:
+    if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Cet utilisateur existe déjà"
         )
     
-    # Générer un nouvel ID utilisateur
-    new_user_id = max([u["user_id"] for u in fake_users_db.values()]) + 1
+    new_user = User(
+        username=request.username,
+        password=request.password
+    )
     
-    # Ajouter l'utilisateur à la "base de données"
-    fake_users_db[request.username] = {
-        "user_id": new_user_id,
-        "username": request.username,
-        "password": request.password,  # ⚠️ À hasher en production
-        "role": "user"
-    }
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
     
     return {
         "message": "Utilisateur créé avec succès",
-        "user_id": new_user_id,
-        "username": request.username
+        "user_id": new_user.id,
+        "username": new_user.username
     }
 
 
 @router.get("/me")
-def get_me():
-    """
-    Obtenir les informations de l'utilisateur connecté
-    (endpoint de test pour vérifier l'authentification)
-    """
+def get_me(db: Session = Depends(get_db)):
+    total_users = db.query(User).count()
     return {
         "message": "Pour obtenir vos infos, utilisez le token dans Authorization header",
-        "users_available": list(fake_users_db.keys()),
+        "total_users": total_users,
         "token_expires_in_minutes": settings.ACCESS_TOKEN_EXPIRE_MINUTES
     }
