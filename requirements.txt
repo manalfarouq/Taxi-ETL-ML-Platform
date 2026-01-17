@@ -12,3 +12,12 @@ scikit-learn
 sqlalchemy 
 
 python-dotenv
+
+pytest
+fastapi 
+uvicorn
+httpx
+pydantic
+pydantic-settings
+python-jose[cryptography]
+

@@ -14,7 +14,6 @@ class Settings(BaseSettings):
     
     # Optionnel: pour le modèle ML
     MODEL_PATH: str = "./models/eta_model"
-    MODEL_VERSION: str = "v1.0"
     
     # Optionnel: pour Spark
     SPARK_DRIVER_MEMORY: str = "2g"
